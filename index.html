@@ -1,0 +1,1022 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Reveals | The Food Manufacturing Guy</title>
+  <meta name="description" content="Search every Sunday teardown and sourced X note by product, brand, ingredient, claim, or tag.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --cream: #FBF5E5;
+      --navy: #16264A;
+      --gold: #FFD249;
+      --muted: #4A5670;
+      --rule: #D9D2BE;
+      --white: #FFFDF7;
+      --red: #9E2B25;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; background: var(--cream); color: var(--navy); }
+    body { font-family: "Source Serif 4", Georgia, serif; min-height: 100vh; }
+    a { color: var(--navy); }
+    header.top {
+      border-bottom: 1px solid var(--rule);
+      background: var(--cream);
+    }
+    .wrap { max-width: 920px; margin: 0 auto; padding: 0 20px; }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; padding: 14px 0; flex-wrap: wrap;
+    }
+    .brand {
+      display: flex; align-items: center; gap: 10px; text-decoration: none;
+      font-family: "Barlow Condensed", sans-serif; font-weight: 800;
+      letter-spacing: 0.06em; font-size: 15px; text-transform: uppercase;
+    }
+    .brand img { width: 36px; height: 36px; object-fit: cover; border-radius: 4px; }
+    .links { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; }
+    .links a {
+      font-family: "Barlow Condensed", sans-serif; font-weight: 700;
+      letter-spacing: 0.08em; font-size: 13px; text-transform: uppercase;
+      text-decoration: none; color: var(--navy);
+    }
+    .links a:hover { color: var(--red); }
+    .hero { padding: 36px 0 20px; }
+    h1 {
+      font-family: "Barlow Condensed", sans-serif; font-weight: 800;
+      font-size: clamp(32px, 6vw, 52px); line-height: 0.95; margin: 0 0 10px;
+      letter-spacing: -0.02em; text-transform: uppercase;
+    }
+    .lede { margin: 0; color: var(--muted); font-size: 18px; max-width: 38em; }
+    .search-box {
+      margin: 24px 0 14px; display: flex; gap: 8px; align-items: center;
+      background: var(--white); border: 1px solid var(--navy);
+      padding: 0 14px; height: 52px;
+    }
+    .search-box input {
+      flex: 1; border: 0; background: transparent; outline: none;
+      font-family: "Source Serif 4", Georgia, serif; font-size: 18px;
+      color: var(--navy); height: 100%;
+    }
+    .search-box input::placeholder { color: #8A846F; }
+    .clear-btn {
+      font-family: "IBM Plex Mono", monospace; font-size: 11px;
+      text-transform: uppercase; letter-spacing: 0.06em; border: 0;
+      background: transparent; color: var(--muted); cursor: pointer;
+      display: none;
+    }
+    .clear-btn.show { display: inline; }
+    .filters { display: flex; flex-direction: column; gap: 8px; margin-bottom: 8px; }
+    .chip-row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
+    .chip-label {
+      font-family: "IBM Plex Mono", monospace; font-size: 11px;
+      letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted);
+      margin-right: 4px;
+    }
+    .chip {
+      font-family: "IBM Plex Mono", monospace; font-size: 11px;
+      letter-spacing: 0.04em; border: 1px solid var(--navy);
+      background: transparent; color: var(--navy); padding: 5px 10px;
+      cursor: pointer; border-radius: 999px;
+    }
+    .chip[aria-pressed="true"] { background: var(--navy); color: var(--gold); }
+    .meta-line {
+      font-family: "IBM Plex Mono", monospace; font-size: 12px;
+      color: var(--muted); margin: 14px 0 8px;
+    }
+    .results { padding-bottom: 8px; }
+    .load-more {
+      display: block; margin: 8px auto 56px; min-width: 180px;
+      background: var(--navy); color: var(--gold); border: 0;
+      font-family: "Barlow Condensed", sans-serif; font-weight: 800;
+      letter-spacing: 0.08em; text-transform: uppercase; font-size: 15px;
+      padding: 12px 22px; cursor: pointer;
+    }
+    .load-more:hover { background: #0f1b35; }
+    .load-more[hidden] { display: none; }
+    .card {
+      display: block; text-decoration: none; color: inherit;
+      background: var(--white); border: 1px solid var(--rule);
+      padding: 18px 18px 16px; margin: 0 0 10px;
+    }
+    .card:hover { border-color: var(--navy); }
+    .card-top {
+      display: flex; flex-wrap: wrap; gap: 8px 12px; align-items: baseline;
+      font-family: "IBM Plex Mono", monospace; font-size: 11px;
+      letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted);
+      margin-bottom: 6px;
+    }
+    .type-pill {
+      background: var(--gold); color: var(--navy); padding: 2px 7px;
+      letter-spacing: 0.08em;
+    }
+    .type-pill.x-note { background: var(--navy); color: var(--gold); }
+    .card h2 {
+      font-family: "Barlow Condensed", sans-serif; font-weight: 800;
+      font-size: 26px; line-height: 1.05; margin: 0 0 8px;
+      letter-spacing: -0.01em;
+    }
+    .finding { margin: 0 0 10px; font-size: 17px; }
+    .sub { margin: 0 0 10px; color: var(--muted); font-size: 15px; }
+    .tags { display: flex; flex-wrap: wrap; gap: 6px; }
+    .tag {
+      font-family: "IBM Plex Mono", monospace; font-size: 10px;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      border: 1px solid var(--rule); padding: 3px 7px; color: var(--muted);
+    }
+    .empty { padding: 40px 0; color: var(--muted); }
+    footer.site {
+      border-top: 1px solid var(--rule); padding: 24px 0 40px;
+      font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--muted);
+    }
+    footer.site a { color: var(--muted); }
+    @media (max-width: 600px) {
+      .card h2 { font-size: 22px; }
+      .search-box { height: 48px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="wrap nav">
+      <a class="brand" href="https://tipofthebanana.com/">
+        <img src="https://beehiiv-images-production.s3.amazonaws.com/uploads/asset/file/3a1df89e-cd35-49ec-9226-0ed70352de93/fmg_logo.jpg" width="36" height="36" alt="">
+        The Food Manufacturing Guy
+      </a>
+      <nav class="links" aria-label="Site">
+        <a href="https://tipofthebanana.com/about">About</a>
+        <a href="https://tipofthebanana.com/archive">Archive</a>
+        <a href="https://tipofthebanana.com/what-i-buy">What I Buy</a>
+        <a href="https://tipofthebanana.com/subscribe">Subscribe</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>Every label, taken apart.</h1>
+      <p class="lede">Search the Sunday teardowns and sourced X notes by product, brand, ingredient, claim, or tag. Each entry links to the original post.</p>
+      <div class="search-box">
+        <input id="q" type="search" placeholder="Try cassia, Costco, non-dairy, nitrite…" autocomplete="off" spellcheck="false">
+        <button type="button" class="clear-btn" id="clear">Clear</button>
+      </div>
+      <div class="filters">
+        <div class="chip-row" id="type-chips">
+          <span class="chip-label">Type</span>
+        </div>
+        <div class="chip-row" id="tag-chips">
+          <span class="chip-label">Tag</span>
+        </div>
+      </div>
+      <p class="meta-line" id="count"></p>
+    </section>
+    <section class="results" id="results" aria-live="polite"></section>
+    <button type="button" class="load-more" id="load-more" hidden>Load more</button>
+  </main>
+
+  <footer class="site">
+    <div class="wrap">
+      <p>Prototype searchable archive for <a href="https://tipofthebanana.com/">tipofthebanana.com</a>. Findings are taken from public posts. Official site tags used when present; some entries have none.</p>
+    </div>
+  </footer>
+
+  <script id="archive-data" type="application/json">{
+  "generated": "2026-11-14",
+  "note": "All teardowns from tipofthebanana.com/sitemap.xml. X notes are the 20 highest-impression posts among those retrieved from @TipOfTheBanana (Nov 1-14, 2026 public metrics) plus two earlier high-impression notes that appeared in the same API responses (Nutella, Sep 12; decaf, Oct 20). Findings are taken from public free text. Official site tags used when present on the post or tag page; otherwise tags may be blank. This is not an all-time ranking.",
+  "entries": [
+    {
+      "id": "td-thanksgiving-turkey-loss-leader",
+      "type": "teardown",
+      "title": "Your Thanksgiving turkey is priced below wholesale on purpose",
+      "date": "2026-11-08",
+      "product": "Thanksgiving turkey",
+      "brand": "",
+      "finding": "Grocers advertised frozen turkeys at $1.19 a pound while wholesale was $1.81.",
+      "tags": [
+        "Cost-outs",
+        "Labels & Regulation",
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://tipofthebanana.com/p/thanksgiving-turkey-loss-leader"
+    },
+    {
+      "id": "td-costco-sells-before-it-pays-kirkland-who-makes-it",
+      "type": "teardown",
+      "title": "Costco often sells your groceries before it pays for them",
+      "date": "2026-11-01",
+      "product": "Kirkland Signature",
+      "brand": "Costco",
+      "finding": "What Costco's 10-K says about paying suppliers, and how to find who made a Kirkland Signature product.",
+      "tags": [
+        "Labels & Regulation",
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [
+        "Kirkland Signature"
+      ],
+      "url": "https://tipofthebanana.com/p/costco-sells-before-it-pays-kirkland-who-makes-it"
+    },
+    {
+      "id": "td-beef-jerky-no-added-nitrites-cultured-celery",
+      "type": "teardown",
+      "title": "The bag says no added nitrites. The same bag in Britain says sodium nitrite.",
+      "date": "2026-10-25",
+      "product": "Original Beef Jerky",
+      "brand": "Jack Link's",
+      "finding": "The bag says no added nitrites. The same bag in Britain says sodium nitrite.",
+      "tags": [],
+      "ingredients": [
+        "cultured celery",
+        "sodium nitrite"
+      ],
+      "claims": [
+        "no added nitrites",
+        "100% beef"
+      ],
+      "url": "https://tipofthebanana.com/p/beef-jerky-no-added-nitrites-cultured-celery"
+    },
+    {
+      "id": "td-soy-sauce-brewed-vs-hydrolyzed",
+      "type": "teardown",
+      "title": "Two products share the name soy sauce, and only one of them was brewed",
+      "date": "2026-10-18",
+      "product": "soy sauce",
+      "brand": "",
+      "finding": "Brewed soy sauce is soybeans, wheat and salt fermented for months. Non-brewed soy sauce is hydrolyzed soy protein, acid, caramel color and corn syrup made in a day.",
+      "tags": [
+        "Labels & Regulation",
+        "Process",
+        "Pantry"
+      ],
+      "ingredients": [
+        "soybeans",
+        "wheat",
+        "salt",
+        "hydrolyzed soy protein",
+        "caramel color",
+        "corn syrup"
+      ],
+      "claims": [],
+      "url": "https://tipofthebanana.com/p/soy-sauce-brewed-vs-hydrolyzed"
+    },
+    {
+      "id": "td-barilla-made-in-iowa",
+      "type": "teardown",
+      "title": "Barilla is made in Iowa, and a court just said the flag never claimed otherwise",
+      "date": "2026-10-11",
+      "product": "pasta",
+      "brand": "Barilla",
+      "finding": "Barilla's US pasta is milled and extruded in Ames, Iowa and Avon, New York.",
+      "tags": [
+        "Labels & Regulation",
+        "Produce & Grain",
+        "Process",
+        "Pantry"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://tipofthebanana.com/p/barilla-made-in-iowa"
+    },
+    {
+      "id": "td-nutella-13-percent-hazelnuts",
+      "type": "teardown",
+      "title": "Nutella is 13% hazelnuts, and that number is a supply decision",
+      "date": "2026-10-04",
+      "product": "Nutella",
+      "brand": "Ferrero",
+      "finding": "Nutella is 13% hazelnuts. Ferrero buys a quarter of the world's hazelnuts from one Turkish coastline.",
+      "tags": [
+        "Pantry"
+      ],
+      "ingredients": [
+        "hazelnuts",
+        "sugar",
+        "palm oil"
+      ],
+      "claims": [
+        "13% hazelnuts"
+      ],
+      "url": "https://tipofthebanana.com/p/nutella-13-percent-hazelnuts"
+    },
+    {
+      "id": "td-the-pumpkin-costs-six-cents-the-can-costs-nineteen",
+      "type": "teardown",
+      "title": "The pumpkin costs 6 cents. The can costs 19.",
+      "date": "2026-09-23",
+      "product": "100% Pure Pumpkin",
+      "brand": "Libby's",
+      "finding": "Canned pumpkin is really a squash from one corner of Illinois, packed in about 6 weeks.",
+      "tags": [
+        "Cost-outs",
+        "Labels & Regulation",
+        "Produce & Grain",
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [
+        "100% Pure Pumpkin"
+      ],
+      "url": "https://tipofthebanana.com/p/the-pumpkin-costs-six-cents-the-can-costs-nineteen"
+    },
+    {
+      "id": "td-coffee-mate-has-no-cream",
+      "type": "teardown",
+      "title": "Coffee-mate costs less to make than half-and-half",
+      "date": "2026-09-23",
+      "product": "Coffee-mate Original",
+      "brand": "Nestlé",
+      "finding": "There is no cream in Coffee-mate. The bottle is water, corn syrup solids and soybean oil.",
+      "tags": [
+        "Cost-outs",
+        "Labels & Regulation",
+        "Process",
+        "Dairy"
+      ],
+      "ingredients": [
+        "water",
+        "corn syrup solids",
+        "soybean oil",
+        "micellar casein"
+      ],
+      "claims": [
+        "non-dairy"
+      ],
+      "url": "https://tipofthebanana.com/p/coffee-mate-has-no-cream"
+    },
+    {
+      "id": "td-cinnamon-is-cassia",
+      "type": "teardown",
+      "title": "Your cinnamon is almost certainly cassia",
+      "date": "2026-09-23",
+      "product": "ground cinnamon",
+      "brand": "",
+      "finding": "US labels need not say which tree your cinnamon came from. Almost certainly cassia, a different plant than true cinnamon (Cinnamomum verum).",
+      "tags": [
+        "Labels & Regulation",
+        "Process",
+        "Pantry"
+      ],
+      "ingredients": [
+        "cassia",
+        "Cinnamomum verum",
+        "coumarin"
+      ],
+      "claims": [
+        "cinnamon"
+      ],
+      "url": "https://tipofthebanana.com/p/cinnamon-is-cassia"
+    },
+    {
+      "id": "td-castle-cheese-parmesan",
+      "type": "teardown",
+      "title": "The 100% parmesan had no parmesan in it",
+      "date": "2026-09-23",
+      "product": "grated parmesan",
+      "brand": "Castle Cheese",
+      "finding": "FDA found no parmesan in a cheese labeled 100% parmesan. The inspection of Castle Cheese ended in a guilty plea.",
+      "tags": [
+        "Labels & Regulation",
+        "Process",
+        "Dairy"
+      ],
+      "ingredients": [
+        "cellulose"
+      ],
+      "claims": [
+        "100% parmesan"
+      ],
+      "url": "https://tipofthebanana.com/p/castle-cheese-parmesan"
+    },
+    {
+      "id": "td-cream-cheese-tub-vs-brick",
+      "type": "teardown",
+      "title": "The Philadelphia in the tub isn't cream cheese",
+      "date": "2026-09-23",
+      "product": "cream cheese spread",
+      "brand": "Philadelphia",
+      "finding": "Cream cheese has a federal standard: at least 33% milkfat, no more than 55% moisture. Cream cheese spread has none.",
+      "tags": [
+        "Labels & Regulation",
+        "Process",
+        "Dairy"
+      ],
+      "ingredients": [
+        "natamycin",
+        "guar gum"
+      ],
+      "claims": [
+        "cream cheese",
+        "cream cheese spread"
+      ],
+      "url": "https://tipofthebanana.com/p/cream-cheese-tub-vs-brick"
+    },
+    {
+      "id": "td-bagged-salad-chlorine-wash",
+      "type": "teardown",
+      "title": "Triple washed salad is washed in chlorinated water",
+      "date": "2026-09-23",
+      "product": "bagged spring mix",
+      "brand": "",
+      "finding": "Bagged greens are washed in chlorine that mainly protects the wash water.",
+      "tags": [
+        "Labels & Regulation",
+        "Produce & Grain",
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [
+        "triple washed"
+      ],
+      "url": "https://tipofthebanana.com/p/bagged-salad-chlorine-wash"
+    },
+    {
+      "id": "x-2098895428997775402",
+      "type": "x-note",
+      "title": "Nutella is 13% hazelnuts",
+      "date": "2026-09-12",
+      "product": "Nutella",
+      "brand": "Ferrero",
+      "finding": "Nutella is 13% hazelnuts. The first two ingredients are sugar and palm oil and together they're more than half the jar.",
+      "tags": [
+        "Pantry"
+      ],
+      "ingredients": [
+        "hazelnuts",
+        "sugar",
+        "palm oil"
+      ],
+      "claims": [
+        "13% hazelnuts"
+      ],
+      "url": "https://x.com/TipOfTheBanana/status/2098895428997775402"
+    },
+    {
+      "id": "x-2119482079373332601",
+      "type": "x-note",
+      "title": "In-N-Out makes its own hamburger patties, in its own plants",
+      "date": "2026-11-08",
+      "product": "hamburger patties",
+      "brand": "In-N-Out",
+      "finding": "In-N-Out makes its own hamburger patties, in its own plants. The company buys whole chucks, takes the bones out, grinds the meat and forms the patties there.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2119482079373332601"
+    },
+    {
+      "id": "x-2112672988021842401",
+      "type": "x-note",
+      "title": "Most decaf coffee is made with methylene chloride",
+      "date": "2026-10-20",
+      "product": "decaf coffee",
+      "brand": "",
+      "finding": "Most decaf coffee is made with methylene chloride. It's the solvent that used to be in paint stripper.",
+      "tags": [
+        "Labels & Regulation",
+        "Process",
+        "Pantry"
+      ],
+      "ingredients": [
+        "methylene chloride"
+      ],
+      "claims": [
+        "decaf"
+      ],
+      "url": "https://x.com/TipOfTheBanana/status/2112672988021842401"
+    },
+    {
+      "id": "x-2117968355294613909",
+      "type": "x-note",
+      "title": "Wendy's chili was put on the menu to use up leftover hamburger",
+      "date": "2026-11-04",
+      "product": "chili",
+      "brand": "Wendy's",
+      "finding": "Wendy's chili was put on the menu to use up leftover hamburger.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2117968355294613909"
+    },
+    {
+      "id": "x-2120933895600558482",
+      "type": "x-note",
+      "title": "Panera Bread is switching to bread made by outside bakers",
+      "date": "2026-11-12",
+      "product": "bread",
+      "brand": "Panera Bread",
+      "finding": "Panera Bread is switching to bread made by outside bakers. In April 2025 it said it would close its remaining 9 plants within about 2 years.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2120933895600558482"
+    },
+    {
+      "id": "x-2116947881970258297",
+      "type": "x-note",
+      "title": "Chick-fil-A fries its chicken in peanut oil",
+      "date": "2026-11-01",
+      "product": "fried chicken",
+      "brand": "Chick-fil-A",
+      "finding": "Chick-fil-A fries its chicken in peanut oil. Federal law says that oil isn't a peanut allergen.",
+      "tags": [
+        "Labels & Regulation",
+        "Process"
+      ],
+      "ingredients": [
+        "peanut oil"
+      ],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2116947881970258297"
+    },
+    {
+      "id": "x-2118395922661142792",
+      "type": "x-note",
+      "title": "The McRib is mostly pork shoulder pressed into the shape of ribs",
+      "date": "2026-11-05",
+      "product": "McRib",
+      "brand": "McDonald's",
+      "finding": "The McRib is mostly pork shoulder pressed into the shape of ribs.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [
+        "pork shoulder",
+        "pork picnic"
+      ],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2118395922661142792"
+    },
+    {
+      "id": "x-2120209119969952124",
+      "type": "x-note",
+      "title": "Most canned tuna is cooked twice before you open it",
+      "date": "2026-11-10",
+      "product": "canned tuna",
+      "brand": "StarKist",
+      "finding": "Most canned tuna is cooked twice before you open it. StarKist laid out the process at its American Samoa plant in a 2019 permit filing with the EPA.",
+      "tags": [
+        "Process",
+        "Pantry"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2120209119969952124"
+    },
+    {
+      "id": "x-2119845225241956854",
+      "type": "x-note",
+      "title": "King's Hawaiian rolls are baked in Georgia and California, not Hawaii",
+      "date": "2026-11-09",
+      "product": "Original Hawaiian Sweet Rolls",
+      "brand": "King's Hawaiian",
+      "finding": "King's Hawaiian rolls are baked in Georgia and California, not Hawaii. The company's largest bakery is in Oakwood, Georgia.",
+      "tags": [
+        "Process",
+        "Labels & Regulation"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2119845225241956854"
+    },
+    {
+      "id": "x-2118760071601770917",
+      "type": "x-note",
+      "title": "Your Domino's dough was made at a plant and trucked in",
+      "date": "2026-11-06",
+      "product": "pizza dough",
+      "brand": "Domino's",
+      "finding": "Your Domino's dough was made at a plant and trucked in. The store stretches and bakes it. Domino's runs 22 dough manufacturing and supply chain centers in the US.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2118760071601770917"
+    },
+    {
+      "id": "x-2117399858961408230",
+      "type": "x-note",
+      "title": "Much of the L-cysteine in bread dough has been made from feathers and hair",
+      "date": "2026-11-02",
+      "product": "L-cysteine",
+      "brand": "",
+      "finding": "Much of the L-cysteine in bread dough has been made from feathers and hair.",
+      "tags": [
+        "Process",
+        "Labels & Regulation"
+      ],
+      "ingredients": [
+        "L-cysteine"
+      ],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2117399858961408230"
+    },
+    {
+      "id": "x-2116879430098502096",
+      "type": "x-note",
+      "title": "Ham has 4 legal names",
+      "date": "2026-11-01",
+      "product": "ham",
+      "brand": "",
+      "finding": "Ham has 4 legal names. Each one tells you how much water is in it.",
+      "tags": [
+        "Labels & Regulation"
+      ],
+      "ingredients": [],
+      "claims": [
+        "ham",
+        "ham with natural juices"
+      ],
+      "url": "https://x.com/TipOfTheBanana/status/2116879430098502096"
+    },
+    {
+      "id": "x-2117672404558496053",
+      "type": "x-note",
+      "title": "Burger King fries are coated in a batter. McDonald's fries aren't",
+      "date": "2026-11-03",
+      "product": "french fries",
+      "brand": "Burger King",
+      "finding": "Burger King fries are coated in a batter. McDonald's fries aren't.",
+      "tags": [
+        "Process",
+        "Labels & Regulation"
+      ],
+      "ingredients": [
+        "modified potato starch",
+        "rice flour",
+        "xanthan gum"
+      ],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2117672404558496053"
+    },
+    {
+      "id": "x-2121296786744803827",
+      "type": "x-note",
+      "title": "Nestlé puts ground-up Kit Kats in the filling of Kit Kats",
+      "date": "2026-11-13",
+      "product": "Kit Kat",
+      "brand": "Nestlé",
+      "finding": "Nestlé puts ground-up Kit Kats in the filling of Kit Kats. The plant calls the broken bars rework.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2121296786744803827"
+    },
+    {
+      "id": "x-2119055015226884171",
+      "type": "x-note",
+      "title": "Goodles gets its 14 g of protein by stirring protein powder into the pasta",
+      "date": "2026-11-07",
+      "product": "Goodles",
+      "brand": "Goodles",
+      "finding": "Goodles gets its 14 g of protein by stirring protein powder into the pasta.",
+      "tags": [
+        "Process",
+        "Labels & Regulation",
+        "Pantry"
+      ],
+      "ingredients": [
+        "wheat flour",
+        "chickpea protein",
+        "wheat protein"
+      ],
+      "claims": [
+        "14 g of protein"
+      ],
+      "url": "https://x.com/TipOfTheBanana/status/2119055015226884171"
+    },
+    {
+      "id": "x-2118034038195962011",
+      "type": "x-note",
+      "title": "The sushi counter at your grocery store usually isn't run by the grocery store",
+      "date": "2026-11-04",
+      "product": "grocery store sushi",
+      "brand": "AFC",
+      "finding": "The sushi counter at your grocery store usually isn't run by the grocery store. AFC lists 3,984 counters in US supermarkets on its store locator.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2118034038195962011"
+    },
+    {
+      "id": "x-2118832992428909033",
+      "type": "x-note",
+      "title": "Nearly every grocery store turkey is one breed, and it can't mate",
+      "date": "2026-11-06",
+      "product": "grocery store turkey",
+      "brand": "",
+      "finding": "Nearly every grocery store turkey is one breed, and it can't mate. The commercial bird is the Broad Breasted White.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2118832992428909033"
+    },
+    {
+      "id": "x-2117308759064322155",
+      "type": "x-note",
+      "title": "Costco makes slightly more from membership fees than it does from selling the merchandise",
+      "date": "2026-11-02",
+      "product": "",
+      "brand": "Costco",
+      "finding": "Costco makes slightly more from membership fees than it does from selling the merchandise.",
+      "tags": [
+        "Cost-outs"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2117308759064322155"
+    },
+    {
+      "id": "x-2117604960552861889",
+      "type": "x-note",
+      "title": "Taco Bell's seasoned beef has cellulose, oats and cocoa in the seasoning",
+      "date": "2026-11-03",
+      "product": "seasoned beef",
+      "brand": "Taco Bell",
+      "finding": "Taco Bell's seasoned beef has cellulose, oats and cocoa in the seasoning.",
+      "tags": [
+        "Process",
+        "Labels & Regulation"
+      ],
+      "ingredients": [
+        "cellulose",
+        "oats",
+        "cocoa"
+      ],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2117604960552861889"
+    },
+    {
+      "id": "x-2118329988235796911",
+      "type": "x-note",
+      "title": "IHOP's omelettes have pancake batter in them",
+      "date": "2026-11-05",
+      "product": "omelettes",
+      "brand": "IHOP",
+      "finding": "IHOP's omelettes have pancake batter in them. The omelettes are marked as containing wheat and gluten because they're made with a splash of buttermilk pancake batter.",
+      "tags": [
+        "Process",
+        "Labels & Regulation"
+      ],
+      "ingredients": [
+        "buttermilk pancake batter"
+      ],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2118329988235796911"
+    }
+  ]
+}</script>
+  <script>
+  (function () {
+    "use strict";
+
+    var TAGS = ["Cost-outs", "Labels & Regulation", "Produce & Grain", "Process", "Pantry", "Dairy"];
+    var TYPES = [
+      { id: "teardown", label: "Teardown" },
+      { id: "x-note", label: "X note" }
+    ];
+
+    var PAGE = 10;
+    var state = { q: "", types: {}, tags: {}, entries: [], limit: PAGE };
+    var els = {
+      q: document.getElementById("q"),
+      clear: document.getElementById("clear"),
+      results: document.getElementById("results"),
+      count: document.getElementById("count"),
+      loadMore: document.getElementById("load-more"),
+      typeChips: document.getElementById("type-chips"),
+      tagChips: document.getElementById("tag-chips")
+    };
+
+    function norm(s) {
+      return String(s || "").toLowerCase().normalize("NFKD").replace(/[\u0300-\u036f]/g, "");
+    }
+
+    function compact(s) {
+      return norm(s).replace(/[^a-z0-9]+/g, "");
+    }
+
+    function tokens(s) {
+      return norm(s).split(/[^a-z0-9]+/).filter(function (t) { return t.length >= 3; });
+    }
+
+    function haystack(e) {
+      return norm([
+        e.title, e.product, e.brand, e.finding,
+        (e.tags || []).join(" "),
+        (e.ingredients || []).join(" "),
+        (e.claims || []).join(" "),
+        e.url, e.type
+      ].join(" "));
+    }
+
+    function textMatches(e, q) {
+      var hay = e._hay || (e._hay = haystack(e));
+      var hayC = e._hayC || (e._hayC = compact(hay));
+      var cq = compact(q);
+      if (cq && hayC.indexOf(cq) !== -1) return true;
+      // Hyphenated names ("In-N-Out", "non-dairy") already failed the compact
+      // check; do not fall back to leftover fragments like "out".
+      if (/[-']/.test(q) && cq.length >= 4) return false;
+      var toks = tokens(q);
+      if (!toks.length) {
+        var short = norm(q).split(/[^a-z0-9]+/).filter(function (t) { return t.length >= 2; });
+        return short.length ? short.every(function (t) { return hay.indexOf(t) !== -1; }) : false;
+      }
+      return toks.every(function (t) { return hay.indexOf(t) !== -1; });
+    }
+
+    function matches(e) {
+      var activeTypes = Object.keys(state.types).filter(function (k) { return state.types[k]; });
+      if (activeTypes.length && activeTypes.indexOf(e.type) === -1) return false;
+      var activeTags = Object.keys(state.tags).filter(function (k) { return state.tags[k]; });
+      if (activeTags.length) {
+        var have = e.tags || [];
+        var ok = activeTags.some(function (t) { return have.indexOf(t) !== -1; });
+        if (!ok) return false;
+      }
+      var q = state.q.trim();
+      if (!q) return true;
+      return textMatches(e, q);
+    }
+
+    function fmtDate(iso) {
+      var p = String(iso || "").split("-");
+      if (p.length !== 3) return iso || "";
+      var months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      var m = months[parseInt(p[1], 10) - 1] || p[1];
+      return m + " " + parseInt(p[2], 10) + ", " + p[0];
+    }
+
+    function esc(s) {
+      return String(s || "").replace(/[&<>"']/g, function (c) {
+        return ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c];
+      });
+    }
+
+    function productLine(e) {
+      var bits = [];
+      if (e.product) bits.push(e.product);
+      if (e.brand) bits.push(e.brand);
+      return bits.join(" · ");
+    }
+
+    function resetVisible() {
+      state.limit = PAGE;
+    }
+
+    function render() {
+      var list = state.entries.filter(matches).slice().sort(function (a, b) {
+        if (a.date === b.date) return (a.title || "").localeCompare(b.title || "");
+        return a.date < b.date ? 1 : -1;
+      });
+      if (state.limit > list.length && list.length > 0) state.limit = Math.max(PAGE, list.length);
+      var visible = list.slice(0, state.limit);
+      els.count.textContent = "Showing " + visible.length + " of " + list.length;
+      els.clear.classList.toggle("show", !!(state.q || Object.keys(state.types).some(function (k){return state.types[k];}) || Object.keys(state.tags).some(function (k){return state.tags[k];})));
+      if (!list.length) {
+        els.results.innerHTML = '<div class="empty">Nothing matches that search. Try a product, brand, ingredient, or claim — or clear the filters.</div>';
+        els.loadMore.hidden = true;
+        return;
+      }
+      els.results.innerHTML = visible.map(function (e) {
+        var typeLabel = e.type === "teardown" ? "Teardown" : "X note";
+        var typeClass = e.type === "teardown" ? "type-pill" : "type-pill x-note";
+        var sub = productLine(e);
+        var tags = (e.tags || []).map(function (t) { return '<span class="tag">' + esc(t) + "</span>"; }).join("");
+        return '<a class="card" href="' + esc(e.url) + '" data-id="' + esc(e.id) + '">' +
+          '<div class="card-top"><span class="' + typeClass + '">' + typeLabel + "</span><span>" + esc(fmtDate(e.date)) + "</span></div>" +
+          "<h2>" + esc(e.title) + "</h2>" +
+          (sub ? '<p class="sub">' + esc(sub) + "</p>" : "") +
+          '<p class="finding">' + esc(e.finding) + "</p>" +
+          (tags ? '<div class="tags">' + tags + "</div>" : "") +
+        "</a>";
+      }).join("");
+      els.loadMore.hidden = visible.length >= list.length;
+    }
+
+    function writeQuery() {
+      var params = new URLSearchParams();
+      if (state.q) params.set("q", state.q);
+      var types = Object.keys(state.types).filter(function (k) { return state.types[k]; });
+      types.forEach(function (t) { params.append("type", t); });
+      var tags = Object.keys(state.tags).filter(function (k) { return state.tags[k]; });
+      tags.forEach(function (t) { params.append("tag", t); });
+      var qs = params.toString();
+      var next = qs ? "?" + qs : location.pathname;
+      if (location.search !== (qs ? "?" + qs : "") ) history.replaceState(null, "", next);
+    }
+
+    function readQuery() {
+      var params = new URLSearchParams(location.search);
+      state.q = params.get("q") || "";
+      els.q.value = state.q;
+      params.getAll("type").forEach(function (t) { state.types[t] = true; });
+      params.getAll("tag").forEach(function (t) { state.tags[t] = true; });
+    }
+
+    function makeChip(label, pressed, onToggle) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "chip";
+      b.textContent = label;
+      b.setAttribute("aria-pressed", pressed ? "true" : "false");
+      b.addEventListener("click", function () {
+        var next = b.getAttribute("aria-pressed") !== "true";
+        b.setAttribute("aria-pressed", next ? "true" : "false");
+        onToggle(next);
+        resetVisible();
+        writeQuery();
+        render();
+      });
+      return b;
+    }
+
+    function buildChips() {
+      TYPES.forEach(function (t) {
+        els.typeChips.appendChild(makeChip(t.label, !!state.types[t.id], function (on) {
+          state.types[t.id] = on;
+        }));
+      });
+      TAGS.forEach(function (t) {
+        els.tagChips.appendChild(makeChip(t, !!state.tags[t], function (on) {
+          state.tags[t] = on;
+        }));
+      });
+    }
+
+    function loadInline() {
+      var node = document.getElementById("archive-data");
+      var parsed = JSON.parse(node.textContent);
+      return parsed.entries || parsed;
+    }
+
+    function boot(entries) {
+      state.entries = entries || [];
+      resetVisible();
+      render();
+    }
+
+    readQuery();
+    buildChips();
+    els.q.addEventListener("input", function () {
+      state.q = els.q.value;
+      resetVisible();
+      writeQuery();
+      render();
+    });
+    els.clear.addEventListener("click", function () {
+      state.q = "";
+      state.types = {};
+      state.tags = {};
+      els.q.value = "";
+      Array.prototype.forEach.call(document.querySelectorAll(".chip"), function (c) {
+        c.setAttribute("aria-pressed", "false");
+      });
+      resetVisible();
+      writeQuery();
+      render();
+      els.q.focus();
+    });
+    els.loadMore.addEventListener("click", function () {
+      state.limit += PAGE;
+      render();
+    });
+
+    var inline = [];
+    try { inline = loadInline(); } catch (err) { console.error("Inline data failed", err); }
+    boot(inline);
+
+    // Prefer a sibling data.json when hosted as two files, so weekly updates need not rewrite the HTML.
+    try {
+      fetch("data.json", { cache: "no-store" }).then(function (res) {
+        if (!res.ok) return;
+        return res.json();
+      }).then(function (payload) {
+        if (payload && (payload.entries || Array.isArray(payload))) {
+          boot(payload.entries || payload);
+        }
+      }).catch(function () { /* file:// or blocked; inline data already rendered */ });
+    } catch (err) { /* ignore */ }
+  })();
+  </script>
+</body>
+</html>
