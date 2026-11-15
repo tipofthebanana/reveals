@@ -21,6 +21,16 @@
     * { box-sizing: border-box; }
     html, body { margin: 0; padding: 0; background: var(--cream); color: var(--navy); }
     body { font-family: "Source Serif 4", Georgia, serif; min-height: 100vh; }
+    html.is-embed, html.is-embed body {
+      overflow: visible !important;
+      height: auto !important;
+      max-height: none !important;
+      min-height: 0 !important;
+    }
+    html.is-embed header.top,
+    html.is-embed footer.site { display: none; }
+    html.is-embed .hero { padding-top: 20px; }
+    html.is-embed .load-more { margin-bottom: 24px; }
     a { color: var(--navy); }
     header.top {
       border-bottom: 1px solid var(--rule);
@@ -138,6 +148,12 @@
       .search-box { height: 48px; }
     }
   </style>
+  <script>
+    (function () {
+      var embed = (window.self !== window.top) || /(?:^|[?&])embed=1(?:&|$)/.test(location.search);
+      if (embed) document.documentElement.classList.add("is-embed");
+    })();
+  </script>
 </head>
 <body>
   <header class="top">
@@ -895,6 +911,7 @@
       if (!list.length) {
         els.results.innerHTML = '<div class="empty">Nothing matches that search. Try a product, brand, ingredient, or claim — or clear the filters.</div>';
         els.loadMore.hidden = true;
+        reportHeight();
         return;
       }
       els.results.innerHTML = visible.map(function (e) {
@@ -911,10 +928,12 @@
         "</a>";
       }).join("");
       els.loadMore.hidden = visible.length >= list.length;
+      reportHeight();
     }
 
     function writeQuery() {
       var params = new URLSearchParams();
+      if (keepEmbed) params.set("embed", "1");
       if (state.q) params.set("q", state.q);
       var types = Object.keys(state.types).filter(function (k) { return state.types[k]; });
       types.forEach(function (t) { params.append("type", t); });
@@ -923,6 +942,18 @@
       var qs = params.toString();
       var next = qs ? "?" + qs : location.pathname;
       if (location.search !== (qs ? "?" + qs : "") ) history.replaceState(null, "", next);
+    }
+
+    var keepEmbed = /(?:^|[?&])embed=1(?:&|$)/.test(location.search);
+
+    function reportHeight() {
+      if (window.self === window.top) return;
+      var root = document.documentElement;
+      var h = Math.max(
+        root ? root.scrollHeight : 0,
+        document.body ? document.body.scrollHeight : 0
+      );
+      window.parent.postMessage({ type: "totb-height", height: h }, "*");
     }
 
     function readQuery() {
@@ -1016,6 +1047,14 @@
         }
       }).catch(function () { /* file:// or blocked; inline data already rendered */ });
     } catch (err) { /* ignore */ }
+
+    reportHeight();
+    window.addEventListener("load", reportHeight);
+    if (window.ResizeObserver) {
+      var ro = new ResizeObserver(function () { reportHeight(); });
+      ro.observe(document.documentElement);
+      if (document.body) ro.observe(document.body);
+    }
   })();
   </script>
 </body>

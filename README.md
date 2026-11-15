@@ -35,3 +35,7 @@ Use `--type x-note` and an `https://x.com/TipOfTheBanana/status/...` URL for X n
 python3 -m http.server 8765
 # then open http://127.0.0.1:8765/?q=cassia
 ```
+
+## Embedding on tipofthebanana.com
+
+The beehiiv `/reveals` page iframes this archive with `?embed=1`. In an iframe, or with that query, the page hides its own site header and footer, lets the parent document scroll (no inner scrollbar), and posts `{type:'totb-height', height}` to the parent whenever the results change so the iframe can grow (search, filters, Load more). Standalone visits to this GitHub Pages URL still show the full chrome.
