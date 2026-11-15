@@ -1,4 +1,4 @@
-# Searchable reveal archive (prototype)
+# Search Posts: searchable post archive
 
 Self-contained static page. No backend, no CDN search library.
 
@@ -39,3 +39,7 @@ python3 -m http.server 8765
 ## Embedding on tipofthebanana.com
 
 The beehiiv `/reveals` page iframes this archive with `?embed=1`. In an iframe, or with that query, the page hides its own site header and footer, lets the parent document scroll (no inner scrollbar), and posts `{type:'totb-height', height}` to the parent whenever the results change so the iframe can grow (search, filters, Load more). Standalone visits to this GitHub Pages URL still show the full chrome.
+
+### Links when embedded
+
+Teardown cards use `target="_top"` so a click opens the full post on tipofthebanana.com in the main window, not inside the iframe. X note cards use `target="_blank" rel="noopener"`. When embedded, a teardown click also posts `{type:'totb-nav', url}` to the parent so the beehiiv wrapper can move the top window if a browser ever blocks frame navigation. `add-entry.py` only writes data; the links are built in `index.html`.

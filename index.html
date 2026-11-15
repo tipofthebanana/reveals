@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Reveals | The Food Manufacturing Guy</title>
+  <title>Search Posts | The Food Manufacturing Guy</title>
   <meta name="description" content="Search every Sunday teardown and sourced X note by product, brand, ingredient, claim, or tag.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -173,8 +173,8 @@
 
   <main class="wrap">
     <section class="hero">
-      <h1>Every label, taken apart.</h1>
-      <p class="lede">Search the Sunday teardowns and sourced X notes by product, brand, ingredient, claim, or tag. Each entry links to the original post.</p>
+      <h1>Search every post</h1>
+      <p class="lede">Every Sunday teardown and X note, searchable by product, brand, ingredient, or claim. Each entry opens the full post.</p>
       <div class="search-box">
         <input id="q" type="search" placeholder="Try cassia, Costco, non-dairy, nitrite…" autocomplete="off" spellcheck="false">
         <button type="button" class="clear-btn" id="clear">Clear</button>
@@ -195,7 +195,7 @@
 
   <footer class="site">
     <div class="wrap">
-      <p>Prototype searchable archive for <a href="https://tipofthebanana.com/">tipofthebanana.com</a>. Findings are taken from public posts. Official site tags used when present; some entries have none.</p>
+      <p>Searchable post archive for <a href="https://tipofthebanana.com/">tipofthebanana.com</a>. Findings are taken from public posts. Official site tags used when present; some entries have none.</p>
     </div>
   </footer>
 
@@ -4164,7 +4164,10 @@
         var typeClass = e.type === "teardown" ? "type-pill" : "type-pill x-note";
         var sub = productLine(e);
         var tags = (e.tags || []).map(function (t) { return '<span class="tag">' + esc(t) + "</span>"; }).join("");
-        return '<a class="card" href="' + esc(e.url) + '" data-id="' + esc(e.id) + '">' +
+        var linkAttrs = e.type === "teardown"
+          ? ' target="_top"'
+          : ' target="_blank" rel="noopener"';
+        return '<a class="card" href="' + esc(e.url) + '"' + linkAttrs + ' data-type="' + esc(e.type) + '" data-id="' + esc(e.id) + '">' +
           '<div class="card-top"><span class="' + typeClass + '">' + typeLabel + "</span><span>" + esc(fmtDate(e.date)) + "</span></div>" +
           "<h2>" + esc(e.title) + "</h2>" +
           (sub ? '<p class="sub">' + esc(sub) + "</p>" : "") +
@@ -4190,6 +4193,16 @@
     }
 
     var keepEmbed = /(?:^|[?&])embed=1(?:&|$)/.test(location.search);
+
+    // When embedded, teardown links must open the full post in the top window.
+    // target="_top" does this natively on a click; the message lets the
+    // beehiiv wrapper do it too if a browser ever blocks the frame's top navigation.
+    els.results.addEventListener("click", function (ev) {
+      if (window.self === window.top) return;
+      var a = ev.target.closest && ev.target.closest('a.card[data-type="teardown"]');
+      if (!a) return;
+      try { window.parent.postMessage({ type: "totb-nav", url: a.href }, "*"); } catch (err) {}
+    });
 
     function reportHeight() {
       if (window.self === window.top) return;
