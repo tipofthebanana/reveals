@@ -3,6 +3,23 @@
   "note": "Teardowns from tipofthebanana.com/sitemap.xml plus original standalone @TipOfTheBanana X notes from Sep 5, 2026 through Nov 14, 2026 (America/New_York). Replies, reposts, pure promos, and chit-chat were left out. Findings are taken from public post text. Official site tags used only when clearly applicable; otherwise tags may be blank.",
   "entries": [
     {
+      "id": "td-apple-patents-storage-price-honeycrisp-cosmic-crisp",
+      "type": "teardown",
+      "title": "Everything about your apple is managed except its price",
+      "date": "2026-11-15",
+      "product": "apples",
+      "brand": "",
+      "finding": "A patented, trademarked apple licensed to one state's growers went from $72.80 a box to about $28. The apple anyone may plant still brings the highest shipping-point price.",
+      "tags": [
+        "Labels & Regulation",
+        "Produce & Grain",
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://tipofthebanana.com/p/apple-patents-storage-price-honeycrisp-cosmic-crisp"
+    },
+    {
       "id": "x-2121954370086654144",
       "type": "x-note",
       "title": "Unless they're organic, your grapes were fumigated with sulfur dioxide after picking",
