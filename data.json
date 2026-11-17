@@ -3,6 +3,100 @@
   "note": "Teardowns from tipofthebanana.com/sitemap.xml plus original standalone @TipOfTheBanana X notes from Sep 5, 2026 through Nov 14, 2026 (America/New_York). Replies, reposts, pure promos, and chit-chat were left out. Findings are taken from public post text. Official site tags used only when clearly applicable; otherwise tags may be blank.",
   "entries": [
     {
+      "id": "x-2121954370086654144",
+      "type": "x-note",
+      "title": "Unless they're organic, your grapes were fumigated with sulfur dioxide after picking",
+      "date": "2026-11-15",
+      "product": "table grapes",
+      "brand": "",
+      "finding": "Unless they're organic, your grapes were fumigated with sulfur dioxide after picking. California grows 99% of US table grapes and the standard practice is to gas them right after packing, then about once a week in cold storage.",
+      "tags": [
+        "Produce & Grain",
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2121954370086654144"
+    },
+    {
+      "id": "x-2122020052824367252",
+      "type": "x-note",
+      "title": "The color of your egg yolk can be picked off a numbered fan",
+      "date": "2026-11-15",
+      "product": "egg yolk",
+      "brand": "dsm-firmenich",
+      "finding": "The color of your egg yolk can be picked off a numbered fan. The YolkFan has 16 blades, each a shade of yolk from pale yellow to deep orange; Roche made the first one in 1956 with 12 shades.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2122020052824367252"
+    },
+    {
+      "id": "x-2122102585209631142",
+      "type": "x-note",
+      "title": "There's no butter in Pillsbury's \"buttery\" crescent rolls",
+      "date": "2026-11-15",
+      "product": "Original Crescent Rolls",
+      "brand": "Pillsbury",
+      "finding": "There's no butter in Pillsbury's \"buttery\" crescent rolls. The main fat is a vegetable shortening made from soybean oil, hydrogenated palm oil and fractionated palm oil.",
+      "tags": [
+        "Labels & Regulation",
+        "Pantry"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2122102585209631142"
+    },
+    {
+      "id": "x-2122315751378014266",
+      "type": "x-note",
+      "title": "Fish sticks are cut from a frozen block of fish",
+      "date": "2026-11-16",
+      "product": "fish sticks",
+      "brand": "",
+      "finding": "Fish sticks are cut from a frozen block of fish. Skinless fillets are frozen under pressure into a solid rectangle; USDA's spec puts each pollock block at about 16.5 pounds.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2122315751378014266"
+    },
+    {
+      "id": "x-2122382943557759434",
+      "type": "x-note",
+      "title": "The first Cheerios were shot out of a gun",
+      "date": "2026-11-16",
+      "product": "Cheerios",
+      "brand": "General Mills",
+      "finding": "The first Cheerios were shot out of a gun. General Mills calls it a puffing gun: pellets of cooked oat dough are heated in a sealed chamber until pressure builds, then released all at once.",
+      "tags": [
+        "Process",
+        "Pantry"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2122382943557759434"
+    },
+    {
+      "id": "x-2122471779281338695",
+      "type": "x-note",
+      "title": "Dairy Queen's soft serve doesn't meet the FDA standard for ice cream",
+      "date": "2026-11-16",
+      "product": "soft serve",
+      "brand": "Dairy Queen",
+      "finding": "Dairy Queen's soft serve doesn't meet the FDA standard for ice cream. The FDA says ice cream has to be at least 10% milkfat; DQ's FAQ said its soft serve has 5%.",
+      "tags": [
+        "Labels & Regulation",
+        "Dairy"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2122471779281338695"
+    },
+    {
       "id": "x-2121590472225550437",
       "type": "x-note",
       "title": "A Chocolate Chip Clif Bar has the same calories as a Snickers",
