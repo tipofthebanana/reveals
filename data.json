@@ -3,6 +3,53 @@
   "note": "Teardowns from tipofthebanana.com/sitemap.xml plus original standalone @TipOfTheBanana X notes from Sep 5, 2026 through Nov 14, 2026 (America/New_York). Replies, reposts, pure promos, and chit-chat were left out. Findings are taken from public post text. Official site tags used only when clearly applicable; otherwise tags may be blank.",
   "entries": [
     {
+      "id": "x-2124126699575242982",
+      "type": "x-note",
+      "title": "Craisins are what is left after a cranberry is juiced",
+      "date": "2026-11-21",
+      "product": "Craisins",
+      "brand": "Ocean Spray",
+      "finding": "Ocean Spray slices frozen cranberries and an inclined screw washes the juice out against a stream of water; the juice becomes a drink and the leftover berry pieces move on to a second screw.",
+      "tags": [
+        "Process",
+        "Produce & Grain"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2124126699575242982"
+    },
+    {
+      "id": "x-2124194128116457858",
+      "type": "x-note",
+      "title": "Most instant coffee was already brewed before it went in the jar",
+      "date": "2026-11-21",
+      "product": "instant coffee",
+      "brand": "",
+      "finding": "The plant brews a very strong batch of coffee the same basic way as at home, hot water through ground roasted coffee, and then removes the water.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2124194128116457858"
+    },
+    {
+      "id": "x-2124284225981698289",
+      "type": "x-note",
+      "title": "Reddi-wip isn't whipped until you press the nozzle",
+      "date": "2026-11-21",
+      "product": "whipped cream in a can",
+      "brand": "Reddi-wip",
+      "finding": "The can is filled with liquid cream and nitrous oxide gas under pressure, and the gas dissolves into the cream, especially the fat; pressing the nozzle drops the pressure.",
+      "tags": [
+        "Dairy",
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2124284225981698289"
+    },
+    {
       "id": "x-2123921836266426752",
       "type": "x-note",
       "title": "One company makes Red Baron, Freschetta, Tony's, Mrs. Smith's and Edwards",
