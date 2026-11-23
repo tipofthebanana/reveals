@@ -40,6 +40,17 @@
     html.is-embed header.top,
     html.is-embed footer.site { display: none; }
     html.is-embed .hero { padding-top: 20px; }
+    #totb-glossary-top {
+      width: 0;
+      height: 0;
+      overflow: hidden;
+    }
+    html.is-embed #totb-glossary-top,
+    html.is-embed .letter-head,
+    html.is-embed .detail-hero h1,
+    html.is-embed #detail-view a.back {
+      scroll-margin-top: 80px;
+    }
     .hero { padding: 36px 0 20px; }
     h1 { font-family: "Barlow Condensed", sans-serif; font-weight: 800; font-size: clamp(32px, 6vw, 52px); line-height: 0.95; margin: 0 0 10px; letter-spacing: -0.02em; text-transform: uppercase; }
     .lede { margin: 0; color: var(--muted); font-size: 18px; max-width: 42em; }
@@ -142,6 +153,7 @@
     </div>
   </header>
   <main class="wrap">
+    <div id="totb-glossary-top" tabindex="-1" aria-hidden="true"></div>
     <section id="index-view">
       <div class="hero">
         <h1>What's this, and should I care?</h1>
@@ -8011,29 +8023,75 @@
     function isEmbed() {
       return document.documentElement.classList.contains("is-embed");
     }
+    var savedIndexId = "";
+    function visibleContentHeight() {
+      var vis = (detailView && !detailView.hidden) ? detailView : indexView;
+      if (!vis) {
+        var main = document.querySelector("main");
+        return main ? Math.ceil(main.scrollHeight + 16) : 0;
+      }
+      var y = window.scrollY || window.pageYOffset || 0;
+      var r = vis.getBoundingClientRect();
+      // Measure only the visible view. documentElement.scrollHeight stays
+      // as tall as the iframe, so it would never shrink after a detail route.
+      return Math.max(200, Math.ceil((r.top + y) + r.height + 16));
+    }
     function reportHeight() {
       if (window.self === window.top) return;
-      var root = document.documentElement;
-      var h = Math.max(
-        root ? root.scrollHeight : 0,
-        document.body ? document.body.scrollHeight : 0
-      );
+      var h = visibleContentHeight();
       try { window.parent.postMessage({ type: "totb-height", height: h }, "*"); } catch (err) {}
+    }
+    function scrollPageTo(el, align) {
+      try { window.scrollTo(0, 0); } catch (err) {}
+      var target = el || document.getElementById("totb-glossary-top") || document.body;
+      try {
+        if (target && target.scrollIntoView) {
+          target.scrollIntoView({ block: align || "start", behavior: "auto" });
+        }
+      } catch (err) {}
+      // Ask the beehiiv wrapper to scroll the top page to the iframe.
+      // Only for "start" jumps (detail open, A–Z). Restoring a list card
+      // relies on scrollIntoView so we don't pull the parent back to the top.
+      var toTop = !align || align === "start";
+      if (isEmbed() && toTop) {
+        try { window.parent.postMessage({ type: "totb-scroll", offset: 80 }, "*"); } catch (err) {}
+      }
+    }
+    function afterLayout(fn) {
+      requestAnimationFrame(function () {
+        requestAnimationFrame(fn);
+      });
+      setTimeout(fn, 60);
+      setTimeout(fn, 250);
     }
     function show(id) {
       if (id) {
+        if (indexView && !indexView.hidden) savedIndexId = id;
         indexView.hidden = true;
         detailView.hidden = false;
         renderDetail(id);
-        if (!isEmbed()) window.scrollTo(0, 0);
         var ent = byId(id);
         document.title = (ent ? ent.name : "Glossary") + " | The Food Manufacturing Guy";
+        reportHeight();
+        afterLayout(function () {
+          reportHeight();
+          var hero = detailView && detailView.querySelector(".detail-hero h1");
+          scrollPageTo(hero || document.getElementById("totb-glossary-top") || detailView, "start");
+        });
       } else {
+        var restore = savedIndexId;
         detailView.hidden = true;
         indexView.hidden = false;
         document.title = "Ingredient Glossary | The Food Manufacturing Guy";
+        reportHeight();
+        afterLayout(function () {
+          reportHeight();
+          if (restore) {
+            var card = document.querySelector('a.ing-card[href="#/' + encodeURIComponent(restore) + '"]');
+            if (card) scrollPageTo(card, "center");
+          }
+        });
       }
-      reportHeight();
     }
 
     function bind() {
@@ -8075,7 +8133,7 @@
         if (!L) return;
         e.preventDefault();
         var el = document.getElementById("letter-" + L);
-        if (el) el.scrollIntoView({ block: "start" });
+        if (el) scrollPageTo(el, "start");
       });
       window.addEventListener("hashchange", function () { show(currentId()); });
       document.addEventListener("click", function (ev) {
