@@ -8041,19 +8041,20 @@
       var h = visibleContentHeight();
       try { window.parent.postMessage({ type: "totb-height", height: h }, "*"); } catch (err) {}
     }
-    function scrollPageTo(el, align) {
-      try { window.scrollTo(0, 0); } catch (err) {}
+    function scrollPageTo(el, align, pinToIframeTop) {
+      if (pinToIframeTop) {
+        try { window.scrollTo(0, 0); } catch (err) {}
+      }
       var target = el || document.getElementById("totb-glossary-top") || document.body;
       try {
         if (target && target.scrollIntoView) {
           target.scrollIntoView({ block: align || "start", behavior: "auto" });
         }
       } catch (err) {}
-      // Ask the beehiiv wrapper to scroll the top page to the iframe.
-      // Only for "start" jumps (detail open, A–Z). Restoring a list card
-      // relies on scrollIntoView so we don't pull the parent back to the top.
-      var toTop = !align || align === "start";
-      if (isEmbed() && toTop) {
+      // Only when opening a detail view: ask the wrapper to place the iframe
+      // just below the sticky nav. A–Z jumps and "back to all entries" use
+      // scrollIntoView on the letter or card so the list stays in place.
+      if (isEmbed() && pinToIframeTop) {
         try { window.parent.postMessage({ type: "totb-scroll", offset: 80 }, "*"); } catch (err) {}
       }
     }
@@ -8076,7 +8077,7 @@
         afterLayout(function () {
           reportHeight();
           var hero = detailView && detailView.querySelector(".detail-hero h1");
-          scrollPageTo(hero || document.getElementById("totb-glossary-top") || detailView, "start");
+          scrollPageTo(hero || document.getElementById("totb-glossary-top") || detailView, "start", true);
         });
       } else {
         var restore = savedIndexId;
