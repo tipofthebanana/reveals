@@ -43,3 +43,8 @@ The beehiiv `/reveals` page iframes this archive with `?embed=1`. In an iframe, 
 ### Links when embedded
 
 Teardown cards use `target="_top"` so a click opens the full post on tipofthebanana.com in the main window, not inside the iframe. X note cards use `target="_blank" rel="noopener"`. When embedded, a teardown click also posts `{type:'totb-nav', url}` to the parent so the beehiiv wrapper can move the top window if a browser ever blocks frame navigation. `add-entry.py` only writes data; the links are built in `index.html`.
+
+## Ingredient Glossary
+
+The Ingredient Glossary lives in `glossary/` and is served at `https://tipofthebanana.github.io/reveals/glossary/`. The beehiiv page at `/glossary` iframes it with `?embed=1`, same pattern as this archive.
+
