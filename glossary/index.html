@@ -8024,6 +8024,8 @@
       return document.documentElement.classList.contains("is-embed");
     }
     var savedIndexId = "";
+    var routeGen = 0;
+    var lastPostedHeight = 0;
     function visibleContentHeight() {
       var vis = (detailView && !detailView.hidden) ? detailView : indexView;
       if (!vis) {
@@ -8037,13 +8039,28 @@
       return Math.max(200, Math.ceil((r.top + y) + r.height + 16));
     }
     function reportHeight() {
-      if (window.self === window.top) return;
+      if (window.self === window.top) return 0;
       var h = visibleContentHeight();
-      try { window.parent.postMessage({ type: "totb-height", height: h }, "*"); } catch (err) {}
+      if (h !== lastPostedHeight) {
+        lastPostedHeight = h;
+        try { window.parent.postMessage({ type: "totb-height", height: h }, "*"); } catch (err) {}
+      }
+      return h;
     }
     function scrollPageTo(el, align, pinToIframeTop) {
-      if (pinToIframeTop) {
+      // In the embed, never pair scrollIntoView with a parent scroll — they
+      // race (title under the nav, then a second jump). Detail opens send
+      // one height+scroll to the parent. A–Z and back-to-list use
+      // scrollIntoView only.
+      if (pinToIframeTop && isEmbed()) {
         try { window.scrollTo(0, 0); } catch (err) {}
+        var h = visibleContentHeight();
+        lastPostedHeight = h;
+        try {
+          window.parent.postMessage({ type: "totb-height", height: h, scroll: { offset: 80 } }, "*");
+        } catch (err) {}
+        try { window.parent.postMessage({ type: "totb-scroll", offset: 80 }, "*"); } catch (err) {}
+        return;
       }
       var target = el || document.getElementById("totb-glossary-top") || document.body;
       try {
@@ -8051,19 +8068,34 @@
           target.scrollIntoView({ block: align || "start", behavior: "auto" });
         }
       } catch (err) {}
-      // Only when opening a detail view: ask the wrapper to place the iframe
-      // just below the sticky nav. A–Z jumps and "back to all entries" use
-      // scrollIntoView on the letter or card so the list stays in place.
-      if (isEmbed() && pinToIframeTop) {
-        try { window.parent.postMessage({ type: "totb-scroll", offset: 80 }, "*"); } catch (err) {}
-      }
     }
-    function afterLayout(fn) {
-      requestAnimationFrame(function () {
-        requestAnimationFrame(fn);
-      });
-      setTimeout(fn, 60);
-      setTimeout(fn, 250);
+    function whenSettled(fn) {
+      var gen = ++routeGen;
+      function run() {
+        if (gen !== routeGen) return;
+        var last = -1, stable = 0, tries = 0;
+        function tick() {
+          if (gen !== routeGen) return;
+          var h = reportHeight();
+          if (h === last) stable += 1;
+          else { stable = 0; last = h; }
+          tries += 1;
+          if (stable >= 3 || tries >= 24) {
+            requestAnimationFrame(function () {
+              requestAnimationFrame(function () {
+                if (gen !== routeGen) return;
+                fn();
+              });
+            });
+            return;
+          }
+          requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+      }
+      var ready = (document.fonts && document.fonts.ready) ? document.fonts.ready : Promise.resolve();
+      var cap = new Promise(function (res) { setTimeout(res, 200); });
+      Promise.race([ready, cap]).then(run, run);
     }
     function show(id) {
       if (id) {
@@ -8073,19 +8105,20 @@
         renderDetail(id);
         var ent = byId(id);
         document.title = (ent ? ent.name : "Glossary") + " | The Food Manufacturing Guy";
-        reportHeight();
-        afterLayout(function () {
-          reportHeight();
-          var hero = detailView && detailView.querySelector(".detail-hero h1");
-          scrollPageTo(hero || document.getElementById("totb-glossary-top") || detailView, "start", true);
-        });
+        lastPostedHeight = 0;
+        // One combined height+scroll to the parent, immediately. A height-only
+        // post first would shrink the iframe while the parent is still
+        // scrolled down the index, flashing a blank page on long entries.
+        scrollPageTo(detailView && detailView.querySelector(".detail-hero h1"), "start", true);
+        whenSettled(function () { reportHeight(); });
       } else {
         var restore = savedIndexId;
         detailView.hidden = true;
         indexView.hidden = false;
         document.title = "Ingredient Glossary | The Food Manufacturing Guy";
+        lastPostedHeight = 0;
         reportHeight();
-        afterLayout(function () {
+        whenSettled(function () {
           reportHeight();
           if (restore) {
             var card = document.querySelector('a.ing-card[href="#/' + encodeURIComponent(restore) + '"]');
@@ -8149,7 +8182,12 @@
       });
       window.addEventListener("resize", reportHeight);
       if (window.ResizeObserver) {
-        try { new ResizeObserver(reportHeight).observe(document.documentElement); } catch (err) {}
+        try {
+          var ro = new ResizeObserver(function () { reportHeight(); });
+          if (indexView) ro.observe(indexView);
+          if (detailView) ro.observe(detailView);
+          if (document.documentElement) ro.observe(document.documentElement);
+        } catch (err) {}
       }
     }
 
