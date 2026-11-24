@@ -3,6 +3,51 @@
   "note": "Teardowns from tipofthebanana.com/sitemap.xml plus original standalone @TipOfTheBanana X notes from Sep 5, 2026 through Nov 14, 2026 (America/New_York). Replies, reposts, pure promos, and chit-chat were left out. Findings are taken from public post text. Official site tags used only when clearly applicable; otherwise tags may be blank.",
   "entries": [
     {
+      "id": "x-2125007991338635273",
+      "type": "x-note",
+      "title": "Campbell's Cream of Mushroom has more salt than cream",
+      "date": "2026-11-23",
+      "product": "cream of mushroom soup",
+      "brand": "Campbell's",
+      "finding": "Campbell's Cream of Mushroom has more salt than cream.",
+      "tags": [
+        "Labels & Regulation"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2125007991338635273"
+    },
+    {
+      "id": "x-2124919910644203570",
+      "type": "x-note",
+      "title": "One Mexican company bakes Sara Lee bread, Thomas' English muffins and Entenmann's",
+      "date": "2026-11-23",
+      "product": "packaged bread and baked goods",
+      "brand": "Grupo Bimbo",
+      "finding": "One Mexican company bakes Sara Lee bread, Thomas' English muffins and Entenmann's: Grupo Bimbo, based in Mexico City.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2124919910644203570"
+    },
+    {
+      "id": "x-2124852466458226906",
+      "type": "x-note",
+      "title": "The dull side of your aluminum foil was rolled against another sheet of foil",
+      "date": "2026-11-23",
+      "product": "aluminum foil",
+      "brand": "",
+      "finding": "The dull side of your aluminum foil was rolled against another sheet of foil.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2124852466458226906"
+    },
+    {
       "id": "td-vanilla-extract-vs-imitation-vanillin",
       "type": "teardown",
       "title": "The two bottles of vanilla share one molecule, and you pay for everything else",
