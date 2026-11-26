@@ -3,6 +3,52 @@
   "note": "Teardowns from tipofthebanana.com/sitemap.xml plus original standalone @TipOfTheBanana X notes from Sep 5, 2026 through Nov 14, 2026 (America/New_York). Replies, reposts, pure promos, and chit-chat were left out. Findings are taken from public post text. Official site tags used only when clearly applicable; otherwise tags may be blank.",
   "entries": [
     {
+      "id": "x-2125577745350697112",
+      "type": "x-note",
+      "title": "Ocean Spray fills its jellied cranberry sauce cans upside down",
+      "date": "2026-11-25",
+      "product": "jellied cranberry sauce",
+      "brand": "Ocean Spray",
+      "finding": "Ocean Spray fills its jellied cranberry sauce cans upside down.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2125577745350697112"
+    },
+    {
+      "id": "x-2125643428897980511",
+      "type": "x-note",
+      "title": "Brussels sprouts taste less bitter because breeders bred the bitterness out",
+      "date": "2026-11-25",
+      "product": "Brussels sprouts",
+      "brand": "",
+      "finding": "Brussels sprouts taste less bitter than they used to. Seed breeders bred much of the bitterness out.",
+      "tags": [
+        "Produce & Grain"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2125643428897980511"
+    },
+    {
+      "id": "x-2125732766704923135",
+      "type": "x-note",
+      "title": "Del Monte Cream Style Corn has no cream in it",
+      "date": "2026-11-25",
+      "product": "cream style corn",
+      "brand": "Del Monte",
+      "finding": "Del Monte Cream Style Corn has no cream in it.",
+      "tags": [
+        "Labels & Regulation",
+        "Produce & Grain"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2125732766704923135"
+    },
+    {
       "id": "x-2125371133935624465",
       "type": "x-note",
       "title": "HoneyBaked Ham isn't baked, and the glaze has more paprika in it than honey",
