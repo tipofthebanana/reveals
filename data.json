@@ -3,6 +3,98 @@
   "note": "Teardowns from tipofthebanana.com/sitemap.xml plus original standalone @TipOfTheBanana X notes from Sep 5, 2026 through Nov 14, 2026 (America/New_York). Replies, reposts, pure promos, and chit-chat were left out. Findings are taken from public post text. Official site tags used only when clearly applicable; otherwise tags may be blank.",
   "entries": [
     {
+      "id": "x-2125937744149098809",
+      "type": "x-note",
+      "title": "French's yellow mustard gets its bright yellow from turmeric",
+      "date": "2026-11-26",
+      "product": "yellow mustard",
+      "brand": "French's",
+      "finding": "French's yellow mustard gets its bright yellow from turmeric.",
+      "tags": [
+        "Pantry"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2125937744149098809"
+    },
+    {
+      "id": "x-2125975114307215513",
+      "type": "x-note",
+      "title": "Duck sauce packets have more corn syrup than apricot",
+      "date": "2026-11-26",
+      "product": "duck sauce packet",
+      "brand": "Kari-Out",
+      "finding": "The same company makes the duck sauce packet, and it has more corn syrup than apricot.",
+      "tags": [
+        "Pantry",
+        "Labels & Regulation"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2125975114307215513"
+    },
+    {
+      "id": "x-2126006823430041792",
+      "type": "x-note",
+      "title": "The first ingredient in Kitchen Bouquet is caramel color",
+      "date": "2026-11-26",
+      "product": "Kitchen Bouquet",
+      "brand": "Kitchen Bouquet",
+      "finding": "The first ingredient in Kitchen Bouquet is caramel color.",
+      "tags": [
+        "Pantry"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2126006823430041792"
+    },
+    {
+      "id": "x-2126042308625994056",
+      "type": "x-note",
+      "title": "Olive Garden's breadsticks are made by outside bakeries",
+      "date": "2026-11-26",
+      "product": "breadsticks",
+      "brand": "Olive Garden",
+      "finding": "Olive Garden's breadsticks are made by outside bakeries.",
+      "tags": [
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2126042308625994056"
+    },
+    {
+      "id": "x-2126096915746152673",
+      "type": "x-note",
+      "title": "The brown layers in an Andes mint aren't chocolate",
+      "date": "2026-11-26",
+      "product": "Andes mints",
+      "brand": "Andes",
+      "finding": "The brown layers in an Andes mint aren't chocolate.",
+      "tags": [
+        "Labels & Regulation"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2126096915746152673"
+    },
+    {
+      "id": "x-2126133658528731493",
+      "type": "x-note",
+      "title": "Most of the peppers in Tabasco aren't grown in Louisiana",
+      "date": "2026-11-26",
+      "product": "Tabasco",
+      "brand": "Tabasco",
+      "finding": "Most of the peppers in Tabasco aren't grown in Louisiana.",
+      "tags": [
+        "Produce & Grain",
+        "Process"
+      ],
+      "ingredients": [],
+      "claims": [],
+      "url": "https://x.com/TipOfTheBanana/status/2126133658528731493"
+    },
+    {
       "id": "x-2125577745350697112",
       "type": "x-note",
       "title": "Ocean Spray fills its jellied cranberry sauce cans upside down",
